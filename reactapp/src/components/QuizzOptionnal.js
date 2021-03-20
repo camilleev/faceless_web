@@ -3,15 +3,17 @@ import {Link, useParams} from 'react-router-dom';
 
 function QuizzOptionnal() {
 
+    
     const [problemDesc, setProblemDesc] = useState("")
     const [gender, setGender] = useState('')
-
+    
     const [townList, setTownList] = useState([])
+    const [coordinates, setCoordinates] = useState([])
     const [search, setSearch] = useState('')
     // const [selectedTown, setSelectedTown] = useState(null)
-
+    
     const [isSelected, setIsSelected] = useState(-1)
-
+    
     const genderChoice = (index) => {
         if(index === 1){
             setGender('male')
@@ -27,7 +29,7 @@ function QuizzOptionnal() {
         await fetch('/update-user', {
             method: 'POST',
             headers: {'Content-Type':'application/x-www-form-urlencoded'},
-            body: `desc=${problemDesc}&localisation=${search}&gender=${gender}&userId=${id}`
+            body: `desc=${problemDesc}&localisation=${search}&coordinates=${JSON.stringify(coordinates)}&gender=${gender}&userId=${id}`
         });
 
     }
@@ -63,6 +65,7 @@ function QuizzOptionnal() {
               onClick={() => {
                 // setSelectedTown(item.postcode)
                 setSearch(item.label)
+                setCoordinates(item.coordinates)
                 setTimeout(() => {
                   setTownList([])
                 }, 500);

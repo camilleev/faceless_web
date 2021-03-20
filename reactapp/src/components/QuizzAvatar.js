@@ -1,8 +1,10 @@
 import React, {useState, useRef}from 'react';
 import {Link, useParams} from 'react-router-dom';
 import { ChevronForward, ChevronBack} from 'react-ionicons'
+import {connect} from 'react-redux';
 
-function QuizzAvatar() {
+
+function QuizzAvatar(props) {
 
     let { id } = useParams();
     const [imgAvatarSelected, setImgAvatarSelected] = useState('https://i.imgur.com/atDrheA.png')
@@ -42,12 +44,20 @@ function QuizzAvatar() {
     }
 
     const sendData = async () => {
-        await fetch('/update-avatar', {
+        const data = await fetch('/update-avatar', {
             method: 'POST',
             headers: {'Content-Type':'application/x-www-form-urlencoded'},
             body: `avatar=${imgAvatarSelected}&userId=${id}`
         });
+
+        const body = await data.json()
+
+        if(body.result === true){
+            props.addToken(body.token)
+            props.addFilter(body.myFilter)
+        }
     }
+
     
     
     return (
@@ -73,4 +83,20 @@ function QuizzAvatar() {
  );
 }
 
-export default QuizzAvatar;
+// export default QuizzAvatar;
+
+function mapDispatchToProps(dispatch) {
+    return {
+      addToken: function(token) {
+          dispatch( {type: 'addToken', token: token} )
+      },
+      addFilter: function(filter) {
+        dispatch( {type: 'addFilter', filter: filter} )
+    },
+    }
+   }
+   
+   export default connect(
+      null,
+      mapDispatchToProps
+   )(QuizzAvatar);

@@ -3,8 +3,7 @@ import {Link} from 'react-router-dom'
 
 function Nav(props) {
 
-    console.log(props.selected)
-  return (
+    return (
     <nav style={{display: 'flex', flexDirection: 'row', justifyContent: "center", alignItems: "flex-end"}}>
         <Link to="/profil">
             {props.selected === "profil" ? <img src={'https://i.imgur.com/au58pHS.png'} alt="LogoProfilSelected" style={{width: "40px"}}/> 

@@ -71,6 +71,7 @@ function Quizz(props) {
     return <Redirect to={`/quizzOptionnal/${userIdFromBack}`}/>
   }
 
+
   return (
   
   <div className="centerColumn">

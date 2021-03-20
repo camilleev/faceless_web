@@ -15,7 +15,6 @@ function Login(props) {
 
 
     var handleSubmitSignin = async () => {
-        console.log("body")
         const data = await fetch('/sign-in', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -24,11 +23,11 @@ function Login(props) {
       
         const body = await data.json()
 
-        console.log("mail", body.errorMail)
-        console.log("password", body.errorPassword)
+        // console.log("body.myFilter", body.myFilter)
 
         if(body.result === true){
             props.addToken(body.token)
+            props.addFilter(body.myFilter)
             setUserExists(true)
         } else {
             setErrorMail(body.errorMail)
@@ -69,7 +68,10 @@ function mapDispatchToProps(dispatch) {
     return {
       addToken: function(token) {
           dispatch( {type: 'addToken', token: token} )
-      }
+      },
+      addFilter: function(filter) {
+        dispatch( {type: 'addFilter', filter: filter} )
+    },
     }
    }
    

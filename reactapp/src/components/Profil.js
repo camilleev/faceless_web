@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {connect} from 'react-redux';
 import { Location, Power, SettingsOutline} from 'react-ionicons'
+import BtnSoucis from './BtnSoucis'
 
 
 import Nav from './Nav'
@@ -16,6 +17,18 @@ function Profil(props) {
   const [age, setAge] = useState('')
   const [gender, setGender] = useState(2)
   const [desc, setDesc] = useState(descDefault)
+  const [localisation, setLocalisation] = useState("")
+
+  function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+       age--; 
+    }
+    return age;
+  }
 
   useEffect(() => {
 
@@ -26,15 +39,17 @@ function Profil(props) {
         body: `token=${props.token}`
       });
       var response = await rawResponse.json();
+
+      console.log("response", response)
+
       if(response.result){
         setUser(response.user)
         let when = new Date(response.user.subscriptionDate)
         let whenFormat = when.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
         setDate(whenFormat)
         setProblemType(response.user.problems_types)
-        let birthday = new Date(response.user.birthDate)
-        let today = new Date()
-        setAge(today.getFullYear() - birthday.getFullYear())
+        var age = getAge(response.user.birthDate)
+        setAge(age)
         if(response.user.gender === "female") {
           console.log("1111")
           setGender(0)
@@ -48,6 +63,7 @@ function Profil(props) {
         if(response.user.problem_description !== ''){
           setDesc(response.user.problem_description)
         }
+        setLocalisation(response.user.localisation.label)
       }
     }
 
@@ -58,13 +74,7 @@ function Profil(props) {
   
   
   if(props.token){
-    
-    console.log("user", user)
-    var allProblems = problemType.map((item, i) => {
-      return (
-        <button key={i} className="btnProblemTypeSelected noHover" style={{marginRight: "10px", marginBottom: "10px"}}><p className="txtBtnProblemType">{item}</p></button>
-       )
-    })
+  
 
     var genderSrc = [
       {img: 'https://i.imgur.com/S1xUry1.png' , txt: "femme"},
@@ -85,7 +95,7 @@ function Profil(props) {
                   <p className="txtMember" style={{marginTop: "7px", marginBottom: "7px"}}>Membre depuis le {date}</p>
                   <div className="centerRowJustifyCenter">
                     <Location color={'#3D4F84'} width="25px" />
-                    <p className="txtLocation" style={{marginLeft: "5px"}}>Region de {user.localisation}</p>
+                    <p className="txtLocation" style={{marginLeft: "5px"}}>Region de {localisation}</p>
                   </div>
                 </div>
                 <div className='centerRowFlexEnd' style={{width: "100%", marginTop: "10px"}}>
@@ -104,11 +114,11 @@ function Profil(props) {
                 </div>
                 <div style={{width: "100%"}}>
                   <p className="orangeTitle" style={{textAlign: "left"}}>En quelques mots</p>
-                  { desc == descDefault ? <p className="txtIntro" style={{maxHeight: "150px", overflowY: "scroll", fontStyle: "italic", fontWeight: "normal", opacity: 0.5}}>{desc}</p> : <p className="txtIntro" style={{maxHeight: "150px", overflowY: "scroll"}}>{desc}</p>}
+                  { desc === descDefault ? <p className="txtIntro" style={{maxHeight: "150px", overflowY: "scroll", fontStyle: "italic", fontWeight: "normal", opacity: 0.5}}>{desc}</p> : <p className="txtIntro" style={{maxHeight: "150px", overflowY: "scroll"}}>{desc}</p>}
                 </div>
                 <div style={{width: "100%"}}>
                   <p className="orangeTitle" style={{textAlign: "left"}}>Ses soucis</p>
-                  {allProblems}
+                  <BtnSoucis problemType={problemType}/>
                 </div>
                 <div className='centerRowFlexEnd' style={{width: "100%", justifyContent: "space-between"}}>
                   <button className="btnRed" style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
@@ -138,7 +148,10 @@ function mapDispatchToProps(dispatch) {
   return {
     clearToken: function(token) {
         dispatch( {type: 'clearToken'} )
-    }
+    }, 
+    clearFilter: function(token) {
+      dispatch( {type: 'clearFilter'} )
+  }
   }
 }
 
