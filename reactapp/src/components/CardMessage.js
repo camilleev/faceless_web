@@ -1,7 +1,11 @@
 import React from 'react';
-import { Location, SendOutline } from 'react-ionicons'
+import { Location } from 'react-ionicons'
 import {connect} from 'react-redux';
+
+import Modal from './Modal'
+
 import BtnSoucis from './BtnSoucis';
+
 
 function CardMessage(props) {
 
@@ -17,6 +21,10 @@ function CardMessage(props) {
         }
         return age;
     }
+
+    const blockUser = (userId) => {
+      props.blockUserMessage(userId)
+    };
 
     var genderSrc = [
         {img: 'https://i.imgur.com/S1xUry1.png'},
@@ -39,22 +47,7 @@ function CardMessage(props) {
     let when = new Date(props.user.subscriptionDate)
     let date = when.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
     var age = getAge(props.user.birthDate)
-
-
-  async function createConv(contactId, token) {
-    console.log('myId', token)
-    console.log('contactId', contactId)
-    var rawResponse = await fetch(`/create-conv`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `myContactId=${contactId}&myToken=${token}`
-    });
-    var response = await rawResponse.json();
-    console.log("create conv", response.convId)
-
-  }
   
-
     return (
         <div className="centerColumn">
         <div className="cardWithShadow" style={{width: "80%", minHeight:'500px'}}>
@@ -89,26 +82,10 @@ function CardMessage(props) {
             <p className="orangeTitle" style={{textAlign: "left"}}>Ses soucis</p>
             <BtnSoucis problemType={props.user.problems_types}/>
           </div>
-          <div className='centerRowSpaceBetween' style={{marginTop: "15px", width: '100%'}}>
-                <button className="btn">
-                    <p className="txtBtn" style={{display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "8px", marginRight: "12px"}}>
-                        <img src="https://i.imgur.com/ycK8FiG.png" alt="picto_block" style={{marginRight: "5px", width: "22px"}}/>
-                        aider
-                    </p>
-                </button>
-                <button className="btnYellow">
-                    <p className="txtBtn" style={{display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "8px", marginRight: "12px"}}>
-                        <img src="https://i.imgur.com/QxuT6vs.png" alt="picto_block" style={{marginRight: "5px", width: "22px"}}/>
-                        signaler
-                    </p>
-                </button>
-                <button className="btnRed">
-                    <p className="txtBtn" style={{display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "8px", marginRight: "12px"}}>                      
-                        <img src="https://i.imgur.com/Ec9jXlZ.png" alt="picto_block" style={{marginRight: "5px", width: "22px"}}/>
-                        bloquer
-                    </p>
-
-                </button>
+          <div style={{width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: 'space-between'}}>
+                <Modal btn={"aider"}/>
+                <Modal btn={"signaler"}/>
+                <Modal btn={"bloquer"} userId={props.user._id} blockUserCard={blockUser}/>
                 
           </div>
         </div>

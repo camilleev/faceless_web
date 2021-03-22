@@ -14,8 +14,8 @@ var UserSchema = mongoose.Schema({
     gender : String,
     avatar : String,
     statut: String,
-    blocked_user_id: [String],
-    blocked_by_id: [String],
+    blocked_user_id: [ { type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
+    blocked_by_id: [ { type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
 });
 
 const UserModel = mongoose.model('users', UserSchema);

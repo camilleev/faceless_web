@@ -55,13 +55,15 @@ function Card(props) {
     console.log("create conv", response.convId)
 
   }
+
+  
   
 
     return (
-        <div className="centerColumn">
+        <div className="centerColumn" style={{minHeight: "500px"}}>
         <div className="cardWithShadow" style={{minHeight: "500px"}}>
           <img src={props.user.avatar} alt="avatar" style={{width: 100, height: 100, marginTop: "-20%", border: "5px solid #EC9A1F", borderRadius: "50%"}}/>
-          <div className="centerCol" style={{width: "100%"}}>
+          <div className="centerCol">
             <p className="txtPseudo">{props.user.pseudo}</p>
             <p className="txtMember" style={{marginTop: "7px", marginBottom: "7px"}}>Membre depuis le {date}</p>
             <div className="centerRowJustifyCenter">

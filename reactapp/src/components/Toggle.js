@@ -1,24 +1,26 @@
 import React, {useState} from 'react';
 
-function Toggle (){
+function Toggle (props){
 
-    const [isClicked, setIsClicked] = useState(true)
-    console.log("isClicked", isClicked)
+    const [isClicked, setIsClicked] = useState(props.demandStatus)
+
+    console.log("props.demandStatus", props.demandStatus)
   
-    var handleCheckbox = () => {
-      setIsClicked(!isClicked)
+    var handleDemandBox = () => {
+        setIsClicked(!isClicked)
+        props.handleDemandBoxParent()
     }
 
     return (
-        <div className='centerCol'>
-                        <input type="checkbox" id="checkbox-input" style={{display: 'none'}}/>
-                        <label htmlFor="checkbox-input" className="round-slider-container" onClick={()=> handleCheckbox()}>
-                            <div><p className="txtDemand" >Confidents</p></div>
-                            <div><p className="txtDemand" >Demandes</p></div>
-                            <div className="round-slider" style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                            {isClicked ? <p className="txtDemandToggle">Confidents</p> : <p className="txtDemandToggle">Demandes</p>}
-                            </div>
-                        </label>
+        <div className='centerCol' style={{width: "100%"}}>
+            <input type="checkbox" id="checkbox-input" style={{display: 'none'}}/>
+            <label htmlFor="checkbox-input" className="round-slider-container" onClick={()=> handleDemandBox()}>
+                <div><p className="txtDemand" >Confidents</p></div>
+                <div><p className="txtDemand" >Demandes ({props.demandNb})</p></div>
+                <div className="round-slider" style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                {isClicked ? <p className="txtDemandToggle">Demandes ({props.demandNb})</p> : <p className="txtDemandToggle">Confidents</p>}
+                </div>
+            </label>
         </div>
     )
 }

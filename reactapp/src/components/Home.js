@@ -42,8 +42,9 @@ function Home(props) {
   
   useEffect(()=> {
     if(props.filter.problems_types){
-      var problemCheck = problemType.map((item, i)=> {
-        var problemCopy = isProblemSelected
+      // var problemCheck = problemType.map((item, i)=> {
+        problemType.map((item, i)=> {
+          var problemCopy = isProblemSelected
         if(props.filter.problems_types.includes(item)){
           if(!problemCopy[i]){
             problemCopy[i] = !problemCopy[i]
@@ -51,8 +52,9 @@ function Home(props) {
         }
         return setIsProblemSelected(problemCopy)
       })
-      var genderCheck = props.filter.gender.map((item, i) => {
-        var copyGender = isGenderSelected
+      // var genderCheck = props.filter.gender.map((item, i) => {
+        props.filter.gender.map((item) => {
+          var copyGender = isGenderSelected
         if(item === "other"){
           copyGender[0] = true
         }
@@ -168,7 +170,7 @@ function Home(props) {
 
     return (
   
-      <div>
+      <div style={{height: "100vh"}}>
         <div className="filter" style={{width: '27%', position: 'absolute', left: '0px', zIndex: 1}}>
           <div className="centerColumn">
             <div className="leftCol">
@@ -206,7 +208,7 @@ function Home(props) {
           </div>
         </div>
         <Nav selected="home"/>
-        <div className="centerColumn">
+        <div style={{display:"flex", flexDirection: "row", marginTop: "20px", height: "85vh"}}>
           <div className="wrapperCard">
             {cardToShow}
           </div>

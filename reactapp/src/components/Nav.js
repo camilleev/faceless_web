@@ -4,18 +4,20 @@ import {Link} from 'react-router-dom'
 function Nav(props) {
 
     return (
-    <nav style={{display: 'flex', flexDirection: 'row', justifyContent: "center", alignItems: "flex-end"}}>
+    <nav style={{display: 'flex', flexDirection: 'row', justifyContent: "center", alignItems: "flex-start"}}>
         <Link to="/profil">
-            {props.selected === "profil" ? <img src={'https://i.imgur.com/au58pHS.png'} alt="LogoProfilSelected" style={{width: "40px"}}/> 
-            : <img src={'https://i.imgur.com/m2YOsbM.png'} alt="LogoProfil" style={{width: "40px"}}/>}
+            {props.selected === "profil" ? <img src={'https://i.imgur.com/cVEACpM.png'} alt="LogoProfilSelected" style={{width: "60px"}}/> 
+            : <img src={'https://i.imgur.com/NaAwKDQ.png'} alt="LogoProfil" style={{width: "60px"}}/>}
         </Link>
+        <div style={{marginLeft: "130px", marginRight: "130px"}}>
         <Link to="/home">
-            {props.selected === "home" ? <img src={'https://i.imgur.com/zQ3tWN2.png'} alt="LogoHomeSelected" style={{width: "40px", height: "68.53", marginLeft: "100px", marginRight: "100px"}}/>
-            : <img src={'https://i.imgur.com/tX9vcOL.png'} alt="LogoHome" style={{width: "40px", marginLeft: "100px", marginRight: "100px"}}/>}
+            {props.selected === "home" ? <img src={'https://i.imgur.com/6ytgaw5.png'} alt="LogoHomeSelected" style={{width: "60px"}}/>
+            : <img src={'https://i.imgur.com/EGqPW0y.png'} alt="LogoHome" style={{width: "60px"}}/>}
         </Link>
+        </div>
         <Link to="/messages">
-            {props.selected === "msg" ? <img src={'https://i.imgur.com/LVZVjM4.png'} alt="LogoMsgSelected" style={{width: "40px"}}/>
-            : <img src={'https://i.imgur.com/JvgPSCb.png'} alt="LogoMsg" style={{width: "40px"}}/>}
+            {props.selected === "msg" ? <img src={'https://i.imgur.com/FsxFpt7.png'} alt="LogoMsgSelected" style={{width: "60px"}}/>
+            : <img src={'https://i.imgur.com/w5kfhIs.png'} alt="LogoMsg" style={{width: "60px"}}/>}
         </Link>
     </nav>
   );

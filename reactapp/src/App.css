@@ -48,7 +48,7 @@ h2 {
 .card {
   /* border: 2px solid black; */
   width: 400px;
-  height: 600px;
+  /* height: 600px; */
   margin-bottom: 30px;
   display: flex;
   flex-direction: column;
@@ -74,7 +74,7 @@ h2 {
 }
 
 .centerColumn {
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -171,7 +171,6 @@ h2 {
   width: 100%;
   background-color: var(--blanc);
   height: 30px;
-
   border: solid 3px transparent;
   background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(180deg,#7E94E2, var(--bleu-2));
   background-origin: border-box;
@@ -179,6 +178,22 @@ h2 {
   box-shadow: 2px 1000px 1px #fff inset;
   margin-bottom: 30px;
   padding-left: 20px;
+}
+
+.inputDesc {
+  border-radius: 10px;
+  width: 88%;
+  background-color: var(--blanc);
+  border: solid 3px transparent;
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(180deg,#7E94E2, var(--bleu-2));
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 2px 1000px 1px #fff inset;
+  margin-bottom: 30px;
+  padding: 20px;
+  overflow-y: "scroll";
+  height: 100px;
+  resize: none;
 }
 
 .divInputMsg {
@@ -346,7 +361,7 @@ textarea:focus{
   color: var(--bleu-3)
 }
 
-.txtPseudo {
+.txtPseudo, input[type=text].txtPseudo  {
   font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: 800;
@@ -436,6 +451,11 @@ textarea:focus{
   font-size: 11px;
   line-height: 13px;
   color: var(--bleu-1);
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  display: -webkit-box; 
+  -webkit-line-clamp: 3; 
+  -webkit-box-orient: vertical;
 }
 
 .txtMsgFromMe {

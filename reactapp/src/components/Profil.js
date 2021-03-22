@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import {connect} from 'react-redux';
 import { Location, Power, SettingsOutline} from 'react-ionicons'
 import BtnSoucis from './BtnSoucis'
+import { Redirect } from 'react-router';
 
 
 import Nav from './Nav'
-import { Redirect } from 'react-router';
+import Modal from './Modal'
+import { Link } from '@material-ui/core';
+import ProfilUpdate from './ProfilUpdate';
+
 
 function Profil(props) {
 
@@ -19,6 +23,8 @@ function Profil(props) {
   const [desc, setDesc] = useState(descDefault)
   const [localisation, setLocalisation] = useState("")
 
+  const[update, setUpdate] = useState(false)
+
   function getAge(dateString) {
     var today = new Date();
     var birthDate = new Date(dateString);
@@ -28,6 +34,10 @@ function Profil(props) {
        age--; 
     }
     return age;
+  }
+
+  var updateProfil = () => {
+    setUpdate(true)
   }
 
   useEffect(() => {
@@ -51,13 +61,10 @@ function Profil(props) {
         var age = getAge(response.user.birthDate)
         setAge(age)
         if(response.user.gender === "female") {
-          console.log("1111")
           setGender(0)
         } else if(response.user.gender === "male") {
-          console.log("2222")
           setGender(1)
         } else {
-          console.log("3333")
           setGender(2)
         }
         if(response.user.problem_description !== ''){
@@ -74,7 +81,6 @@ function Profil(props) {
   
   
   if(props.token){
-  
 
     var genderSrc = [
       {img: 'https://i.imgur.com/S1xUry1.png' , txt: "femme"},
@@ -82,14 +88,18 @@ function Profil(props) {
       {img: 'https://i.imgur.com/EvKcqi9.png', txt: "other"},
     ]
 
-    console.log(genderSrc[gender].txt)
-
-    return (
+    if(update){
+      console.log("UPDATE TRUE")
+      return (
+        <ProfilUpdate user={user} desc={desc} age={age} gender={genderSrc[gender].txt} imgGender={genderSrc[gender].img} date={date}/>
+      )
+    } else {
+      return (
         <div>
             <Nav selected="profil"/>
-            <div className="centerColumn">
-              <div className="card">
-                <img src={user.avatar} alt="avatar" style={{width: 100, height: 100, marginTop: "-20%", border: "5px solid #EC9A1F", borderRadius: "50%"}}/>
+            <div className="centerCol">
+              <div className="card" style={{alignItems: "center"}}>
+                <img src={user.avatar} alt="avatar" style={{width: 100, height: 100, border: "5px solid #EC9A1F", borderRadius: "50%"}}/>
                 <div className="centerCol" style={{width: "100%"}}>
                   <p className="txtPseudo">{user.pseudo}</p>
                   <p className="txtMember" style={{marginTop: "7px", marginBottom: "7px"}}>Membre depuis le {date}</p>
@@ -121,10 +131,8 @@ function Profil(props) {
                   <BtnSoucis problemType={problemType}/>
                 </div>
                 <div className='centerRowFlexEnd' style={{width: "100%", justifyContent: "space-between"}}>
-                  <button className="btnRed" style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                    <p className="txtBtn" style={{display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "10px", marginRight: "10px"}} onClick={()=> props.clearToken()}><Power color={'#FFFFFF'} width="22px" style={{marginRight: "8px"}} />déconnecter</p>
-                  </button>
-                  <button className="btn">
+                  <Modal btn={"deconnexion"}/>
+                  <button className="btn" onClick={()=> updateProfil()}>
                         <p className="txtBtn" style={{display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "10px", marginRight: "10px"}}><SettingsOutline color={'#FFFFFF'} width="22px" style={{marginRight: "8px"}} />Modifier mon profil</p>
                   </button>
                 </div>
@@ -132,30 +140,19 @@ function Profil(props) {
             </div>
         </div>
     );
+    }
   } else {
     return <Redirect to='/' />
   }
 
 }
 
-// export default Profil;
-
 function mapStateToProps(state) {
   return { token: state.token }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    clearToken: function(token) {
-        dispatch( {type: 'clearToken'} )
-    }, 
-    clearFilter: function(token) {
-      dispatch( {type: 'clearFilter'} )
-  }
-  }
-}
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
  )(Profil);
