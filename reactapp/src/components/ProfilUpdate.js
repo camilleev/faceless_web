@@ -81,10 +81,6 @@ function ProfilUpdate(props) {
   var updateProfil = async () => {
 
     var count = 0
-    // console.log("UPDATE PROFIL")
-    // console.log("DESC", desc)
-    // console.log("LOCALISATION", search)
-    // console.log("COORDINATES", coordinates)
     isProblemSelected.map((item, i) => {
       if (item === true) {
         allProblemList.push(problemType[i])
@@ -109,14 +105,13 @@ function ProfilUpdate(props) {
       });
       var response = await rawResponse.json();
       if(response.result){
-        return <Redirect to="/profil"></Redirect>
+        props.updateProfilParent()
       }
     }
     
   }
     
   if(props.token){
-
 
     return (
         <div>

@@ -10,7 +10,7 @@ function BtnSoucis(props) {
     }
 
     return (
-        <div>
+        <div style={{height: "80px"}}>
             {allProblems}
         </div>
     )

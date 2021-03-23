@@ -41,7 +41,7 @@ function Login(props) {
 
     return (
     <div>
-        <div className="centerColumn">
+        <div className="centerColumn" style={{minHeight: "90vh"}}>
             <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "300px"}}>
                 <p className="orangeTitle">j’ai déjà un compte : </p>
                 <input type="text" className="inputWhite" placeholder={"exemple@email.fr"} onChange={p => setEmail(p.target.value)} value={email} />

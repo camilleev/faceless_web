@@ -399,49 +399,33 @@ router.post('/send-msg', async function (req, res, next) {
 
 router.post('/show-convers', async function (req, res, next) {
 
-  // let friendsData = []
   let conversations = []
-  // let conversationsData = []
   let askNewConversation = false
   let nbNewConversations = 0
+  let nbUnreadMsg = 0
+  let convWithUnreadMsg = []
 
-  console.log("req.body.demand", typeof req.body.demand)
-  console.log("req.body.demand", req.body.demand)
+  // console.log("req.body.demand", typeof req.body.demand)
+  console.log("req.body", req.body)
 
   if (req.body.demand == 'true') {
     askNewConversation = true
   } 
-  // if (req.query && req.query.user_id === '') {
-  //   res.json({
-  //     conversations
-  //   })
-  // }
-
-  // console.log("req.body.token", req.body.token)
   
   const user = await UserModel.findOne({
     token: req.body.token
   })
 
   const myConnectedId = user._id
-
+  
   const blockedBy = user.blocked_by_id
   const allBlockedId = blockedBy.concat(user.blocked_user_id)
 
-    console.log("allBlockedId", allBlockedId)
-
-
-  // const blockedBy = user.blocked_by_id
-  // const allBlockedId = blockedBy.concat(user.blocked_user_id)
-
-  // console.log("allBlockedId", allBlockedId)
-
   // compter le nb de demandes de conversation
   const allConversations = await ConversationsModel.find({
-    participants: { $in: [myConnectedId], $nin: allBlockedId},
-    // participants: { $in: [myConnectedId], $nin: allBlockedId },
+    participants: { $in: [user._id], $nin: allBlockedId},
   })
-  // console.log("allConversations", allConversations)
+
   allConversations.forEach(element => {
     nbNewConversations = element.demand === true ? ++nbNewConversations : nbNewConversations
   });
@@ -450,25 +434,28 @@ router.post('/show-convers', async function (req, res, next) {
 
   // load les conversations avec mes contacts
   const conversationsPerPart = await ConversationsModel.find({
-    participants: { $in: [myConnectedId], $nin: allBlockedId },
-    // participants: { $in: [myConnectedId], $nin: allBlockedId },
+    participants: { $in: [user._id], $nin: allBlockedId },
     demand: askNewConversation,
   })
 
-  console.log('conversationsPerPart = ', conversationsPerPart)
-  console.log('allConversations = ', allConversations)
+  var allUnreadMsg = await MessagesModel.find({
+    to_id: myConnectedId,
+    demand: false,
+    read: false,
+  })
 
+  nbUnreadMsg = allUnreadMsg.length
+
+  var unique = allUnreadMsg.map((item) => {
+    return item.conversation_id.toString()
+  })
+  
+  convWithUnreadMsg = [...new Set(unique)];
+  
   if(conversationsPerPart.length == 0){
-    console.log("PAS DE CONV")
-    res.json({result : false, conversations, nbNewConversations})
+    res.json({result : false, conversations, nbNewConversations, nbUnreadMsg, convWithUnreadMsg})
   } else {
     await Promise.all(conversationsPerPart.map(async (element, index) => {
-      // compter les messages non lus par l'utilisateur de l'app
-      // var allUnreadMsg = await MessagesModel.find({
-      //   conversation_id: element._id,
-      //   to_id: new ObjectId(myConnectedId),
-      //   read: false,
-      // })
   
       // // construit un tableau listant le dernier message de chaque conversation
       var lastMsg = await MessagesModel.find({
@@ -476,54 +463,20 @@ router.post('/show-convers', async function (req, res, next) {
       })
         .sort({ date: -1 })
         .limit(1)
-  
-      // console.log("lastMsg :", index, "//", lastMsg)
-  
-      // var allMsg = await MessagesModel.find({
-      //   conversation_id: element._id
-      // })
-  
-  
+    
       // construit un tableau des infos de mes contacts (avatar, pseudo...)
-      const notMe = JSON.stringify(element.participants[0]) === JSON.stringify(myConnectedId) ? element.participants[1] : element.participants[0]
+      const notMe = JSON.stringify(element.participants[0]) === JSON.stringify(user._id) ? element.participants[1] : element.participants[0]
   
   
       let myFriend = await UserModel.findById(notMe)
-  
-      // le confindent est Online ?? analyse date dernier message
-      // const lastMsgFriend = await MessagesModel.findOne({
-      //   from_id: notMe,
-      // }).sort({ date: -1 })
-  
-  
-      // now = new Date()
-  
-      // let statusOnLine = 'off'
-      // if (lastMsgFriend) {
-      //   statusOnLine = now - lastMsgFriend.date < 900000 ? 'on' : 'recent'    // - de 15 min, soit 1000 * 15 * 60 = 900000 ms
-      //   statusOnLine = now - lastMsgFriend.date < 1800000 ? 'recent' : 'off'  // - de 30 min, soit 1000 * 30 * 60 = 1800000 ms
-      //   if (myFriend) { // si !null (cas utilisateur supprimé DB)
-      //     myFriend = { ...myFriend.toObject(), statusOnLine }
-      //   }
-      // }
-  
+    
       if(lastMsg.length === 0){
-        // friendsData.push(myFriend)
-        // conversationsData.push({
-        //   lastMessage: {
-        //     conversation_id: element._id,
-        //     from_id: myConnectedId,
-        //     to_id: myFriend._id,
-        //     date: new Date(),
-        //     content: "nouvelle conversation"
-        //   },
-        // })
         conversations.push({
           friendsData: myFriend,
           conversationsData: {
             lastMessage: {
               conversation_id: element._id,
-              from_id: myConnectedId,
+              from_id: user._id,
               to_id: myFriend._id,
               date: new Date(),
               content: "nouvelle conversation"
@@ -531,14 +484,7 @@ router.post('/show-convers', async function (req, res, next) {
           }
         }
         )
-        // console.log("conversationsData", conversationsData)
       } else {
-        // friendsData.push(myFriend)
-        // conversationsData.push({
-        //   // nbUnreadMsg: allUnreadMsg.length,
-        //   lastMessage: lastMsg[0],
-        //   // friendsDatas: myFriend,
-        // })
         conversations.push({
           friendsData: myFriend,
           conversationsData: {lastMessage: lastMsg[0]}
@@ -555,17 +501,10 @@ router.post('/show-convers', async function (req, res, next) {
         return a.conversationsData.lastMessage.date > b.conversationsData.lastMessage.date ? -1 : 1
       }
     })
-    // conversations.sort((a, b) => a.nbUnreadMsg > b.nbUnreadMsg ? -1 : 1) // messages non lus en 1er
+
+    console.log("nbUnreadMsg", nbUnreadMsg)
   
-    // console.log("lastConvId", conversations[0].conversationsData.lastMessage.conversation_id)
-    // console.log("friendsData._id", conversations[0].friendsData._id)
-    console.log("conversations", conversations)
-    // res.json({
-    //   conversations,
-    //   nbNewConversations,
-    // })
-  
-    res.json({result : true, conversations, lastConvId: conversations[0].conversationsData.lastMessage.conversation_id, lastContactId: conversations[0].friendsData._id, nbNewConversations, askNewConversation})
+    res.json({result : true, conversations, lastConvId: conversations[0].conversationsData.lastMessage.conversation_id, lastContactId: conversations[0].friendsData._id, nbNewConversations, askNewConversation, nbUnreadMsg, convWithUnreadMsg})
   
   }
 });
@@ -577,12 +516,16 @@ router.post('/show-msg', async function(req, res, next) {
   })
 
   const friend = await UserModel.findOne({
-    _id: req.body.  myContactId
+    _id: req.body.myContactId
   })
 
   const allMsgWithUser = await MessagesModel.find(
     {conversation_id: req.body.convId}
   )
+
+  if (me) {
+    await MessagesModel.updateMany({ to_id: me._id, conversation_id: req.body.convId }, { read: true })
+  }
 
   res.json({result: true, allMsgWithUser, avatar: me.avatar, friendData: friend});
 });
@@ -607,13 +550,6 @@ router.post('/block-user', async function(req, res, next) {
 });
 
 router.post('/update-profil', async function(req, res, next) {
-
-  // console.log("req.body.token", req.body.token)
-  // console.log("req.body.localisation", req.body.localisation)
-  // console.log("req.body.coordinates", JSON.parse(req.body.coordinates))
-  // console.log("req.body.desc", req.body.desc)
-  // console.log("req.body.allProblemList", JSON.parse(req.body.allProblemList))
-  console.log("req.body.pseudo", req.body.pseudo)
 
   const me = await UserModel.findOne({
     token: req.body.token

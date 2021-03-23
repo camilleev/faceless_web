@@ -458,6 +458,20 @@ textarea:focus{
   -webkit-box-orient: vertical;
 }
 
+.txtMsgUnread {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 13px;
+  color: var(--bleu-1);
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  display: -webkit-box; 
+  -webkit-line-clamp: 3; 
+  -webkit-box-orient: vertical;
+}
+
 .txtMsgFromMe {
   font-family: 'Montserrat', sans-serif;
   font-style: normal;
@@ -501,12 +515,14 @@ textarea:focus{
   overflow-x: auto;
 }
 
+
 .wrapperCard {
   width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   overflow-y: auto;
+  padding-top: 10px;
 }
 
 .item {
@@ -536,6 +552,7 @@ textarea:focus{
   background-image: linear-gradient(to right, rgba(255, 241, 226, 0.4) 80%,  rgba(255, 255, 255, 0) );
   /* filter: blur(30px); */
   backdrop-filter: blur(30px);
+  height: "100%";
   /* background-color: var(--beige); */
   /* opacity: 0.3; */
 }

@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
+import { ChevronBack} from 'react-ionicons'
 import {connect} from 'react-redux';
 import { Send } from 'react-ionicons'
 
@@ -21,6 +22,15 @@ function Messages(props) {
   const [demand, setDemand] = useState(false)
   const [nbDemand, setNbDemand] = useState(0)
   const [selectedConv, setSelectedConv] = useState('')
+  const [unreadMsg, setUnreadMsg] = useState(0)
+  const [idConvUnread, setIdConvUnread] = useState([])
+
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
 
   useEffect(()=>{
     getLastConv()
@@ -39,6 +49,8 @@ function Messages(props) {
     var response = await rawResponse.json();
     setConversations(response.conversations)
     setNbDemand(response.nbNewConversations)
+    setUnreadMsg(response.nbUnreadMsg)
+    setIdConvUnread(response.convWithUnreadMsg)
   }
 
   var selectConv = async (convId, myContactId, token, item) => {
@@ -55,21 +67,24 @@ function Messages(props) {
     setCardData(response.friendData)
     fetchMsg()
     setSelectedConv(convId)
-    console.log("KEY", convId)
+    scrollToBottom()
+    // console.log("KEY", convId)
   }
 
   async function getLastConv(){
     var rawResponse = await fetch('/show-convers', {
       method: 'POST',
       headers: {'Content-Type':'application/x-www-form-urlencoded'},
-      body: `token=${props.token}`
-      // body: `token=${props.token}&demand=${demand}`
+      // body: `token=${props.token}`
+      body: `token=${props.token}&demand=${demand}`
     });
     var response = await rawResponse.json();
-    console.log("RESPONSE", response)
+    // console.log("RESPONSE", response)
     var lastConvId = response.lastConvId
     var lastContactId = response.lastContactId
     selectConv(lastConvId, lastContactId, props.token)
+    setIdConvUnread(response.convWithUnreadMsg)
+    setUnreadMsg(response.nbUnreadMsg)
   }
     
   var sendMsg = async (msg, token, convId, contactId) => {
@@ -102,11 +117,15 @@ function Messages(props) {
   if(conversations){
     var conv = conversations.map((item, i)=> {
       var selected = false
+      var unRead = false
       if(item.conversationsData.lastMessage.conversation_id == selectedConv){
         selected = true
       }
+      if(idConvUnread.includes(item.conversationsData.lastMessage.conversation_id)){
+        unRead = true
+      }
       return (
-        <ConversationsList friends={item.friendsData} conversations={item.conversationsData} key={i} selectConvParent={selectConv} selected={selected}/>
+        <ConversationsList friends={item.friendsData} conversations={item.conversationsData} key={i} selectConvParent={selectConv} selected={selected} unRead={unRead}/>
       )
     })
   }
@@ -126,16 +145,16 @@ function Messages(props) {
           {/* <div className="centerColumn"> */}
             <div style={{display:"flex", flexDirection: "row", height: "85vh", margin:"0px"}}>
               <div style={{display:"flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center",  width: "31%"}}>
-                <Toggle handleDemandBoxParent={handleDemandBox} demandStatus={demand} demandNb={nbDemand}/>
+                <Toggle handleDemandBoxParent={handleDemandBox} demandStatus={demand} demandNb={nbDemand} unreadMsg={unreadMsg}/>
                 <div className="scrollBarMsg" style={{maxHeight: "80vh", overflowY: "scroll", marginTop: "10px", height: "100%", width: "100%", marginRight: "0px"}}>
                   <div style={{height: "20px", width: "31%", background: "linear-gradient(to bottom,  rgba(255, 241, 226, 1) 0%, rgba(255, 241, 226, 0) 100%)", position: "absolute"}}></div>
                   {conv}
                 </div>
               </div>
-
               { convId ? <div style={{width: "38%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end"}}>
-                <div className="scrollBarMsg" style={{height: "80vh", overflowX: "auto", width: "100%"}}>
+                <div className="scrollBarMsg" style={{height: "80vh", overflowY: "auto", width: '100%'}}>
                   {msg}
+                  <div ref={messagesEndRef} />
                 </div>
                 <div className="divInputMsg">
                   <textarea multiline={true} style={{width: "85%",marginLeft: "15px", height:'100%', resize: "none"}} type="text" className="inputMsg" placeholder={"Votre message ici..."} onChange={p => setMsgContent(p.target.value)} value={msgContent} />

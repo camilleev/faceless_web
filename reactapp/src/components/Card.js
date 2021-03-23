@@ -56,13 +56,10 @@ function Card(props) {
 
   }
 
-  
-  
-
     return (
-        <div className="centerColumn" style={{minHeight: "500px"}}>
-        <div className="cardWithShadow" style={{minHeight: "500px"}}>
-          <img src={props.user.avatar} alt="avatar" style={{width: 100, height: 100, marginTop: "-20%", border: "5px solid #EC9A1F", borderRadius: "50%"}}/>
+        <div className="centerColumn" style={{display: "flex", flexDirection: "row", alignItems: "flex-start"}}>
+        <div className="cardWithShadow">
+          <img src={props.user.avatar} alt="avatar" style={{width: 100, height: 100, border: "5px solid #EC9A1F", borderRadius: "50%"}}/>
           <div className="centerCol">
             <p className="txtPseudo">{props.user.pseudo}</p>
             <p className="txtMember" style={{marginTop: "7px", marginBottom: "7px"}}>Membre depuis le {date}</p>
@@ -87,7 +84,7 @@ function Card(props) {
           </div>
           <div style={{width: "100%"}}>
             <p className="orangeTitle" style={{textAlign: "left"}}>En quelques mots</p>
-            { props.user.problem_description === "" ? <p className="txtIntro" style={{maxHeight: "150px", overflowY: "scroll", fontStyle: "italic", fontWeight: "normal", opacity: 0.5}}>{descDefault}</p> : <p className="txtIntro" style={{maxHeight: "150px", overflowY: "scroll"}}>{props.user.problem_description}</p>}
+            { props.user.problem_description === "" ? <p className="txtIntro" style={{height: "60px", overflowY: "scroll", fontStyle: "italic", fontWeight: "normal", opacity: 0.5}}>{descDefault}</p> : <p className="txtIntro" style={{height: "60px", overflowY: "scroll"}}>{props.user.problem_description}</p>}
           </div>
           <div style={{width: "100%"}}>
             <p className="orangeTitle" style={{textAlign: "left"}}>Ses soucis</p>

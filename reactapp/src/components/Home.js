@@ -170,10 +170,10 @@ function Home(props) {
 
     return (
   
-      <div style={{height: "100vh"}}>
-        <div className="filter" style={{width: '27%', position: 'absolute', left: '0px', zIndex: 1}}>
-          <div className="centerColumn">
-            <div className="leftCol">
+      <div>
+        <div className="filter" style={{width: '27%', position: 'absolute', left: '0px', bottom: 'Opx', zIndex: 1, minHeight: "100%"}}>
+          <div className="centerColumn" >
+            <div className="leftCol" >
               <div>
                 <h1 style={{textAlign: "left"}}>Salut<br></br>{me.pseudo}!</h1>
               </div>
@@ -208,8 +208,12 @@ function Home(props) {
           </div>
         </div>
         <Nav selected="home"/>
-        <div style={{display:"flex", flexDirection: "row", marginTop: "20px", height: "85vh"}}>
+        <div style={{display:"flex", flexDirection: "row", marginTop: "20px", minHeight: "85vh"}}>
           <div className="wrapperCard">
+          <div className="centerColumn" style={{marginLeft: "10px"}}>
+          <div style={{height: "490px", width: "400px"}}>
+          </div>
+          </div>
             {cardToShow}
           </div>
         </div>
