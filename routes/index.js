@@ -43,6 +43,14 @@ router.post('/new-user', async function(req, res, next) {
     {pseudo: req.body.pseudo}
   )
 
+  const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  var testEmail = regex.test(String(req.body.email).toLowerCase());
+
+  if(!testEmail){
+    emailError = "Cela ne ressemble pas à un email"
+    check = false
+  }
+
   if(checkPseudo){
     pseudoError = "Ce pseudo est déjà utilisé"
     check = false
@@ -88,6 +96,25 @@ router.post('/new-user', async function(req, res, next) {
     })
 
     var filters = await newFilters.save();
+
+    var conv = new ConversationsModel({
+      participants: [user._id, '605bc7d2b47905ffd6040ede'
+      ],
+      demand: true
+    })
+  
+    var newConv = await conv.save()
+
+    var msg = new MessagesModel({
+      conversation_id: newConv._id,
+      from_id: '605bc7d2b47905ffd6040ede',
+      to_id: user._id,
+      content: "Bienvenue sur Faceless, Tu viens de recevoir ton premier message ! Si tu y reponds, tu le verras passer en confident ",
+      date: new Date(),
+      read: false
+    })
+    
+    var newMsg = await msg.save()
 
     result = true
     res.json({ userId: user._id , result, token: user.token});
@@ -184,7 +211,6 @@ router.post('/sign-in', async function(req,res,next){
           {user: searchUser._id}
         )
 
-        // console.log("myFilter", myFilter)
       } else {
         errorMail = "mail invalide"
       }
@@ -221,7 +247,6 @@ router.post('/show-card', async function(req, res, next) {
   
   //CALCUL DISTANCE
   function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-    // console.log(lat1, lat2, lon1, lon2)
     var R = 6371;
     var dLat = deg2rad(lat2 - lat1);
     var dLon = deg2rad(lon2 - lon1);
@@ -243,7 +268,6 @@ router.post('/show-card', async function(req, res, next) {
     participants: me._id,
   })
 
-  // console.log('conversations', conversations)
 
   var conversationsWithId = []
 
@@ -253,8 +277,6 @@ router.post('/show-card', async function(req, res, next) {
     }
   }
 
-  // console.log("conversationsWithId", conversationsWithId)
-
 
   //display User NOT ME + IS_ADULT?
   var userAdult = await UserModel.find({
@@ -263,7 +285,6 @@ router.post('/show-card', async function(req, res, next) {
     is_adult: me.is_adult,
   })
 
-  // console.log("userAdult", userAdult)
 
   //FILTER BY AGE
   var userFilteredByAge = []
@@ -277,8 +298,6 @@ router.post('/show-card', async function(req, res, next) {
   var userFilteredByGender = [];
   for (let i = 0; i < userFilteredByAge.length; i++) {
     if (myFilter.problems_types.some((element) => userFilteredByAge[i].problems_types.includes(element)) == true &&
-      // user.blocked_user_id.includes(userAdult[i]._id) == false &&
-      // user.blocked_by_id.includes(userAdult[i]._id) == false) {
         myFilter.gender.includes(userFilteredByAge[i].gender) == true ) {
         userFilteredByGender.push(userFilteredByAge[i]);
     }
@@ -297,7 +316,7 @@ router.post('/show-card', async function(req, res, next) {
         }
       }
     }
-    res.json({result: true, userToDisplay: userFilteredByGender, me, myFilter});
+    res.json({result: true, userToDisplay: userFilterOnLocation, me, myFilter});
   }
 
 });
@@ -327,8 +346,6 @@ router.post('/update-filter', async function(req, res, next) {
 
 
 router.post('/create-conv', async function (req, res, next) {
-  // console.log(" req.body.myContactId", req.body.myContactId)
-  // console.log(" req.body.myToken", req.body.myToken)
 
   var user = await UserModel.findOne(
     { token: req.body.myToken }
@@ -341,8 +358,6 @@ router.post('/create-conv', async function (req, res, next) {
 
   var newConv = await conv.save()
 
-  console.log("newConv", newConv)
-
   res.json({
     result: true,
     convId: newConv._id,
@@ -352,10 +367,6 @@ router.post('/create-conv', async function (req, res, next) {
 
 
 router.post('/send-msg', async function (req, res, next) {
-  
-  // const searchConvWithUser = await ConversationsModel.findOne({
-  //   participants: { $all: [req.body.myId, req.body.myContactId] }
-  // })
 
   const user = await UserModel.findOne({
     token: req.body.token
@@ -364,8 +375,6 @@ router.post('/send-msg', async function (req, res, next) {
   const convWithUser = await ConversationsModel.findOne({
     _id: req.body.convId
   })
-
-  // console.log("convWithUser", convWithUser)
   
   var msg = new MessagesModel({
     conversation_id: req.body.convId,
@@ -405,8 +414,6 @@ router.post('/show-convers', async function (req, res, next) {
   let nbUnreadMsg = 0
   let convWithUnreadMsg = []
 
-  // console.log("req.body.demand", typeof req.body.demand)
-  console.log("req.body", req.body)
 
   if (req.body.demand == 'true') {
     askNewConversation = true
@@ -429,8 +436,6 @@ router.post('/show-convers', async function (req, res, next) {
   allConversations.forEach(element => {
     nbNewConversations = element.demand === true ? ++nbNewConversations : nbNewConversations
   });
-  console.log("nbNewConversations", nbNewConversations)
-  console.log("askNewConversation", askNewConversation)
 
   // load les conversations avec mes contacts
   const conversationsPerPart = await ConversationsModel.find({
@@ -501,8 +506,6 @@ router.post('/show-convers', async function (req, res, next) {
         return a.conversationsData.lastMessage.date > b.conversationsData.lastMessage.date ? -1 : 1
       }
     })
-
-    console.log("nbUnreadMsg", nbUnreadMsg)
   
     res.json({result : true, conversations, lastConvId: conversations[0].conversationsData.lastMessage.conversation_id, lastContactId: conversations[0].friendsData._id, nbNewConversations, askNewConversation, nbUnreadMsg, convWithUnreadMsg})
   

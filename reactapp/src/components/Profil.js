@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {connect} from 'react-redux';
-import { Location, Power, SettingsOutline} from 'react-ionicons'
-import BtnSoucis from './BtnSoucis'
 import { Redirect } from 'react-router';
 
-
-import Nav from './Nav'
-import Modal from './Modal'
-import { Link } from '@material-ui/core';
 import ProfilUpdate from './ProfilUpdate';
 import ProfilUser from './ProfilUser';
 
@@ -45,7 +39,6 @@ function Profil(props) {
     });
     var response = await rawResponse.json();
 
-    console.log("response", response)
 
     if(response.result){
       setUser(response.user)
@@ -70,7 +63,6 @@ function Profil(props) {
   }
 
   var updateProfil = () => {
-    console.log("CLIC DETECTE")
     setUpdate(!update)
     fetchData()
   }

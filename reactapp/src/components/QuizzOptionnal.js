@@ -41,16 +41,13 @@ function QuizzOptionnal() {
         if (search.length > 2) {
     
           const uri = `https://api-adresse.data.gouv.fr/search/?q=${search}&type=municipality&autocomplete=1`
-        //   console.log("uri", uri)
           const data = await fetch(uri)
           const body = await data.json()
           const townsAPI = body.features
           const townsApiName = []
-        //   console.log("townsAPI", townsAPI)
           townsAPI && townsAPI.map((town) => {
             return (townsApiName.push({
               label: town.properties.label,
-            //   postcode: town.properties.postcode,
               coordinates: town.geometry.coordinates,
             }))
           })
@@ -102,8 +99,6 @@ function QuizzOptionnal() {
     })
 
     let { id } = useParams();
-
-    console.log("id", id)
     
     return (
         <div className="centerColumn">

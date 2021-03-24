@@ -35,10 +35,9 @@ function Home(props) {
 
   useEffect(() => {
 
-    
     fetchData()
     
-  }, [props.token]);
+  }, []);
   
   useEffect(()=> {
     if(props.filter.problems_types){
@@ -52,7 +51,6 @@ function Home(props) {
         }
         return setIsProblemSelected(problemCopy)
       })
-      // var genderCheck = props.filter.gender.map((item, i) => {
         props.filter.gender.map((item) => {
           var copyGender = isGenderSelected
         if(item === "other"){

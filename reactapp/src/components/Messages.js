@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { ChevronBack} from 'react-ionicons'
 import {connect} from 'react-redux';
 import { Send } from 'react-ionicons'
 
@@ -68,18 +67,15 @@ function Messages(props) {
     fetchMsg()
     setSelectedConv(convId)
     scrollToBottom()
-    // console.log("KEY", convId)
   }
 
   async function getLastConv(){
     var rawResponse = await fetch('/show-convers', {
       method: 'POST',
       headers: {'Content-Type':'application/x-www-form-urlencoded'},
-      // body: `token=${props.token}`
       body: `token=${props.token}&demand=${demand}`
     });
     var response = await rawResponse.json();
-    // console.log("RESPONSE", response)
     var lastConvId = response.lastConvId
     var lastContactId = response.lastContactId
     selectConv(lastConvId, lastContactId, props.token)
@@ -118,7 +114,7 @@ function Messages(props) {
     var conv = conversations.map((item, i)=> {
       var selected = false
       var unRead = false
-      if(item.conversationsData.lastMessage.conversation_id == selectedConv){
+      if(item.conversationsData.lastMessage.conversation_id === selectedConv){
         selected = true
       }
       if(idConvUnread.includes(item.conversationsData.lastMessage.conversation_id)){

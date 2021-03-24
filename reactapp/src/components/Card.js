@@ -44,15 +44,12 @@ function Card(props) {
 
 
   async function createConv(contactId, token) {
-    console.log('myId', token)
-    console.log('contactId', contactId)
-    var rawResponse = await fetch(`/create-conv`, {
+    
+    await fetch(`/create-conv`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: `myContactId=${contactId}&myToken=${token}`
     });
-    var response = await rawResponse.json();
-    console.log("create conv", response.convId)
 
   }
 

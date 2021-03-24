@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
-import { Location, Power, SettingsOutline} from 'react-ionicons'
+import { Location, SettingsOutline} from 'react-ionicons'
 import BtnSoucis from './BtnSoucis'
 import { Redirect } from 'react-router';
 
 
 import Nav from './Nav'
 import Modal from './Modal'
-import { Link } from '@material-ui/core';
 
 
 function Profil(props) {

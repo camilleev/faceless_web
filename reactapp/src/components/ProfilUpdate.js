@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {connect} from 'react-redux';
-import { Location, Power, SettingsOutline} from 'react-ionicons'
-import BtnSoucis from './BtnSoucis'
+import { SettingsOutline} from 'react-ionicons'
 import { Redirect } from 'react-router';
 
-
 import Nav from './Nav'
-import Modal from './Modal'
 
 
 function ProfilUpdate(props) {
@@ -43,16 +40,13 @@ function ProfilUpdate(props) {
     if (search.length > 2) {
 
       const uri = `https://api-adresse.data.gouv.fr/search/?q=${search}&type=municipality&autocomplete=1`
-    //   console.log("uri", uri)
       const data = await fetch(uri)
       const body = await data.json()
       const townsAPI = body.features
       const townsApiName = []
-    //   console.log("townsAPI", townsAPI)
       townsAPI && townsAPI.map((town) => {
         return (townsApiName.push({
           label: town.properties.label,
-        //   postcode: town.properties.postcode,
           coordinates: town.geometry.coordinates,
         }))
       })

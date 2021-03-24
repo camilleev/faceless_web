@@ -23,7 +23,6 @@ function Login(props) {
       
         const body = await data.json()
 
-        // console.log("body.myFilter", body.myFilter)
 
         if(body.result === true){
             props.addToken(body.token)

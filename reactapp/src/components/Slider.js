@@ -10,9 +10,6 @@ export default function SliderHome(props) {
   }, [props.defaultValue])
 
 
-  // console.log("props.defaultValue", props.defaultValue)
-  // console.log("value composant", value)
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
     props.valueSliderParent(newValue)

@@ -18,7 +18,6 @@ function ConversationsList (props){
     }
 
     if(props.unRead){
-        console.log("UNREAD")
         unread = {width: "10px", height: "10px", borderRadius: "5px", backgroundColor: "var(--bleu-2"}
         txtMsg = "txtMsgUnread"
     }
