@@ -2,6 +2,7 @@ import React from 'react';
 
 function MessagesList (props){
 
+    //tri des messages entre ceux de l'utilisateur et ceux du contact pour les afficher à gauche ou à droite
     if(props.msgData.from_id === props.myContactId){
         return (
             <div style={{width: "95%", marginBottom: "8px"}}>

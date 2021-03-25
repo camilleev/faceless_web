@@ -61,8 +61,6 @@ function Login(props) {
  );
 }
 
-// export default Login;
-
 function mapDispatchToProps(dispatch) {
     return {
       addToken: function(token) {

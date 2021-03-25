@@ -20,6 +20,7 @@ function Card(props) {
         return age;
     }
 
+    //src image genre
     var genderSrc = [
         {img: 'https://i.imgur.com/S1xUry1.png'},
         {img: 'https://i.imgur.com/FNaPA8d.png'},      
@@ -28,6 +29,8 @@ function Card(props) {
 
     var genderTxt
     var genderImg
+
+    //traduction pour affichage
     if(props.user.gender === 'female'){
       genderTxt = "femme"
       genderImg = genderSrc[0].img
@@ -98,9 +101,6 @@ function Card(props) {
       </div>
    );
   }
-
-
-// export default Card;
 
 function mapStateToProps(state) {
   return { 

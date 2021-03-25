@@ -138,7 +138,6 @@ function Messages(props) {
   return (
       <div style={{height: "100vh"}}>
           <Nav selected="msg"/>
-          {/* <div className="centerColumn"> */}
             <div style={{display:"flex", flexDirection: "row", height: "85vh", margin:"0px"}}>
               <div style={{display:"flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center",  width: "31%"}}>
                 <Toggle handleDemandBoxParent={handleDemandBox} demandStatus={demand} demandNb={nbDemand} unreadMsg={unreadMsg}/>
@@ -161,12 +160,9 @@ function Messages(props) {
                 {cardData.localisation ? <CardMessage user={cardData} blockUserMessage={blockUser}/> : null} 
               </div>
             </div>
-          {/* </div> */}
       </div>
   );
 }
-
-// export default Messages;
 
 function mapStateToProps(state) {
   return { 

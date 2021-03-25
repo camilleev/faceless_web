@@ -22,11 +22,7 @@ function getAge(dateString) {
   return age;
 }
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render();
-});
-
+//création d'un nouvel utilisateur
 router.post('/new-user', async function(req, res, next) {
 
   var result = false
@@ -43,6 +39,7 @@ router.post('/new-user', async function(req, res, next) {
     {pseudo: req.body.pseudo}
   )
 
+  //vérification du format de l'email
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   var testEmail = regex.test(String(req.body.email).toLowerCase());
 
@@ -62,6 +59,7 @@ router.post('/new-user', async function(req, res, next) {
 
   if(check){
 
+    //hash mdp
     const hash = bcrypt.hashSync(req.body.password, cost);
 
     var isAdult = false
@@ -87,6 +85,7 @@ router.post('/new-user', async function(req, res, next) {
   
     var user = await newUser.save();
 
+    //ajout des filtres par default
     var newFilters = new FilterModel({
       problems_types: JSON.parse(req.body.problemsTypes),
       is_adult: isAdult,
@@ -97,6 +96,7 @@ router.post('/new-user', async function(req, res, next) {
 
     var filters = await newFilters.save();
 
+    //creation d'une premiere conversation avec Faceless
     var conv = new ConversationsModel({
       participants: [user._id, '605bc7d2b47905ffd6040ede'
       ],
@@ -109,7 +109,7 @@ router.post('/new-user', async function(req, res, next) {
       conversation_id: newConv._id,
       from_id: '605bc7d2b47905ffd6040ede',
       to_id: user._id,
-      content: "Bienvenue sur Faceless, Tu viens de recevoir ton premier message ! Si tu y reponds, tu le verras passer en confident ",
+      content: "Bienvenu(e) sur Faceless! Tu viens de recevoir ton premier message ! Si tu y reponds, tu le verras passer en confident ",
       date: new Date(),
       read: false
     })
@@ -123,6 +123,7 @@ router.post('/new-user', async function(req, res, next) {
   res.json({result, emailError, pseudoError});
 });
 
+//update information depuis quizzOptional
 router.post('/update-user', async function(req, res, next) {
 
   var localisation = "France"
@@ -155,6 +156,7 @@ router.post('/update-user', async function(req, res, next) {
   res.json({result: true});
 });
 
+//ajout url avatar en BDD
 router.post('/update-avatar', async function(req, res, next) {
 
   var user = await UserModel.updateOne(
@@ -174,6 +176,7 @@ router.post('/update-avatar', async function(req, res, next) {
 
   res.json({result: true, token: searchUser.token, myFilter});
 });
+
 
 router.post('/sign-in', async function(req,res,next){
     var result = false
@@ -200,6 +203,7 @@ router.post('/sign-in', async function(req,res,next){
   
       if(searchUser){
 
+        //compare mdp chiffrés
         if(bcrypt.compareSync(password,searchUser.password)){
           result = true
           token = searchUser.token 
@@ -241,6 +245,7 @@ router.post('/show-card', async function(req, res, next) {
     { token: req.body.token }
   )
 
+  //recupere les filtres de l'utilisateur
   var myFilter = await FilterModel.findOne(
     {user: me._id}
   )
@@ -264,6 +269,7 @@ router.post('/show-card', async function(req, res, next) {
     return deg * (Math.PI / 180)
   }
 
+  //toutes les conversations de l'utilisateur
   var conversations = await ConversationsModel.find({
     participants: me._id,
   })
@@ -286,7 +292,7 @@ router.post('/show-card', async function(req, res, next) {
   })
 
 
-  //FILTER BY AGE
+  //profils filtrés par age
   var userFilteredByAge = []
   for (let i=0; i< userAdult.length; i++){
     if(getAge(userAdult[i].birthDate)>myFilter.age[0] && getAge(userAdult[i].birthDate)<myFilter.age[1]){
@@ -294,7 +300,7 @@ router.post('/show-card', async function(req, res, next) {
     }
   }
 
-  //FILTER USER BY GENDER 
+  //profils filtrés par genre 
   var userFilteredByGender = [];
   for (let i = 0; i < userFilteredByAge.length; i++) {
     if (myFilter.problems_types.some((element) => userFilteredByAge[i].problems_types.includes(element)) == true &&
@@ -303,7 +309,7 @@ router.post('/show-card', async function(req, res, next) {
     }
   }
 
-
+  //profils filtrés par rapport à la distance 
   let userFilterOnLocation = [];
   if (myFilter.localisation == 800) {
     res.json({result: true, userToDisplay: userFilteredByGender, me, myFilter})
@@ -321,6 +327,8 @@ router.post('/show-card', async function(req, res, next) {
 
 });
 
+
+//modification du filtre de recherche de l'utilisateur
 router.post('/update-filter', async function(req, res, next) {
 
   var user = await UserModel.findOne(
@@ -387,14 +395,15 @@ router.post('/send-msg', async function (req, res, next) {
   
   var newMsg = await msg.save()
 
+  //renvoie les conversions en demande si convWithUser.demand = true
   if (convWithUser.demand) {
     var allMsg = await MessagesModel.find(
       { conversation_id: convWithUser._id }
     )
 
+    // verifie que le message est envoyé par le destinataire pour changer le status de la demande
     for (var i = 0; i < allMsg.length; i++) {
       if (JSON.stringify(allMsg[i].to_id) == JSON.stringify(user._id)) {
-        // condition fonctionnelle mais à améliorer
         var updateStatusConv = await ConversationsModel.updateOne(
           { _id: convWithUser._id },
           { demand: false }
@@ -425,6 +434,7 @@ router.post('/show-convers', async function (req, res, next) {
 
   const myConnectedId = user._id
   
+  // recupere tous les id blockés par l'utilisateur ou les id qui l'ont bloqué
   const blockedBy = user.blocked_by_id
   const allBlockedId = blockedBy.concat(user.blocked_user_id)
 
@@ -455,6 +465,7 @@ router.post('/show-convers', async function (req, res, next) {
     return item.conversation_id.toString()
   })
   
+  // creation d'un tableau d'id de conversations possédant des messages non lus
   convWithUnreadMsg = [...new Set(unique)];
   
   if(conversationsPerPart.length == 0){
@@ -471,7 +482,6 @@ router.post('/show-convers', async function (req, res, next) {
     
       // construit un tableau des infos de mes contacts (avatar, pseudo...)
       const notMe = JSON.stringify(element.participants[0]) === JSON.stringify(user._id) ? element.participants[1] : element.participants[0]
-  
   
       let myFriend = await UserModel.findById(notMe)
     
@@ -501,13 +511,13 @@ router.post('/show-convers', async function (req, res, next) {
   
     // tri du tableau 
     conversations.sort((a, b) => {
-      // par date dernier message
-      if (a.conversationsData.lastMessage && b.conversationsData.lastMessage) {
-        return a.conversationsData.lastMessage.date > b.conversationsData.lastMessage.date ? -1 : 1
-      }
-    })
+    // par date dernier message
+    if (a.conversationsData.lastMessage && b.conversationsData.lastMessage) {
+      return a.conversationsData.lastMessage.date > b.conversationsData.lastMessage.date ? -1 : 1
+    }
+  })
   
-    res.json({result : true, conversations, lastConvId: conversations[0].conversationsData.lastMessage.conversation_id, lastContactId: conversations[0].friendsData._id, nbNewConversations, askNewConversation, nbUnreadMsg, convWithUnreadMsg})
+  res.json({result : true, conversations, lastConvId: conversations[0].conversationsData.lastMessage.conversation_id, lastContactId: conversations[0].friendsData._id, nbNewConversations, askNewConversation, nbUnreadMsg, convWithUnreadMsg})
   
   }
 });
@@ -522,10 +532,12 @@ router.post('/show-msg', async function(req, res, next) {
     _id: req.body.myContactId
   })
 
+  //recupere tous les messages d'un conversation avec un utilisateur
   const allMsgWithUser = await MessagesModel.find(
     {conversation_id: req.body.convId}
   )
 
+  //changement du statut des msg: read
   if (me) {
     await MessagesModel.updateMany({ to_id: me._id, conversation_id: req.body.convId }, { read: true })
   }

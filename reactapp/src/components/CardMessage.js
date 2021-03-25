@@ -9,7 +9,7 @@ import BtnSoucis from './BtnSoucis';
 
 function CardMessage(props) {
 
-    var descDefault = "Cette persone n'a pas renseigné de description, n'hésite pas à lui écrire pour en apprendre plus sur elle!"
+    var descDefault = "Cette personne n'a pas renseigné de description, n'hésite pas à lui écrire pour en apprendre plus sur elle!"
 
     function getAge(dateString) {
         var today = new Date();
@@ -92,9 +92,6 @@ function CardMessage(props) {
       </div>
    );
   }
-
-
-// export default Card;
 
 function mapStateToProps(state) {
   return { 

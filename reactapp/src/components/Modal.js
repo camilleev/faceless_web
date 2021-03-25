@@ -23,6 +23,7 @@ function SimpleModal(props) {
 
     };
 
+    //modal signalement cette personne a besoin d'aide
     if(props.btn === "aider"){
         return (
             <div>
@@ -59,6 +60,7 @@ function SimpleModal(props) {
           );
     }
 
+    //modal signalement d'un utilisateur
     if(props.btn === "signaler"){
         return (
             <div>
@@ -95,6 +97,7 @@ function SimpleModal(props) {
           );
     }
 
+    //modal bloquer cette personne
     if(props.btn === "bloquer"){
         return (
             <div>
@@ -131,6 +134,7 @@ function SimpleModal(props) {
           );
     }
 
+    //modal deconnexion
     if(props.btn === "deconnexion"){
         return (
             <div>

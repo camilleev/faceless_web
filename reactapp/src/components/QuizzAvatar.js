@@ -83,8 +83,6 @@ function QuizzAvatar(props) {
  );
 }
 
-// export default QuizzAvatar;
-
 function mapDispatchToProps(dispatch) {
     return {
       addToken: function(token) {

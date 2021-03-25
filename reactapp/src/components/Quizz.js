@@ -111,8 +111,6 @@ function Quizz(props) {
  );
 }
 
-// export default Quizz;
-
 function mapDispatchToProps(dispatch) {
   return {
     addToken: function(token) {

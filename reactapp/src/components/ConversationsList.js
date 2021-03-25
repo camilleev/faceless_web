@@ -49,8 +49,6 @@ function ConversationsList (props){
     )
 }
 
-// export default ConversationsList
-
 
 function mapStateToProps(state) {
     return { 

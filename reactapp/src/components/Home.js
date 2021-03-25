@@ -140,6 +140,7 @@ function Home(props) {
 
   }
 
+  //image gender avec survol
   var images = [
     {unSelected:<img className="bigger" src={'https://i.imgur.com/wK81q24.png'} style={{width: 50, height: 50}}
     onMouseOver={e => (e.currentTarget.src = 'https://i.imgur.com/EvKcqi9.png')}
@@ -185,7 +186,6 @@ function Home(props) {
               <div>
                 <p className="txtSubtitle">Age</p>
                 <p className="txtSlider">{age[0]} - {age[1]} ans</p>
-                {/* {age !== [] ? <Slider defaultValue={age} valueSliderParent={valueSlider} max={100}/> : null} */}
                 { me.is_adult ? <Slider defaultValue={age} valueSliderParent={valueSlider} max={100} min={18}/> : <Slider defaultValue={age} valueSliderParent={valueSlider} max={18} min={15}/>}
               </div>
               <div>
@@ -223,7 +223,6 @@ function Home(props) {
 
 }
 
-// export default Home;
 function mapStateToProps(state) {
   return { 
     token: state.token,
