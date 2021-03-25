@@ -35,12 +35,12 @@ function Profil(props) {
                 </div>
                 <div className='centerRowFlexEnd' style={{width: "100%", marginTop: "10px"}}>
                   <div className="centerCol">
-                    <img src={props.imgGender} alt="gender" style={{width: "30px"}}/>
-                    <p className="txtSubtitle">{props.gender}</p>
+                    <img src='https://i.imgur.com/3z1tTfc.png' alt="category" style={{width: "30px"}}/>
+                    <p className="txtSubtitle">novice</p>
                   </div>
                   <div className="centerCol" style={{marginLeft: "30px", marginRight: "30px"}}>
-                    <img src={'https://i.imgur.com/FNaPA8d.png'} alt="gender" style={{width: "30px"}}/>
-                    <p className="txtSubtitle">femme</p>
+                    <img src={props.imgGender} alt="gender" style={{width: "30px"}}/>
+                    <p className="txtSubtitle">{props.gender}</p>
                   </div>
                   <div className="centerCol">
                     <p className="txtAge">{props.age}</p>                  
