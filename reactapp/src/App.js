@@ -2,6 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import "./App.css"
 
+import LandingPage from './components/LandingPage';
 import Login from './components/Login';
 import Quizz from './components/Quizz';
 import QuizzOptionnal from './components/QuizzOptionnal';
@@ -27,7 +28,8 @@ function App() {
     <Provider store={store}>
       <Router>
       <Switch>
-        <Route exact path="/" component={Login}/>
+        <Route exact path="/" component={LandingPage}/>
+        <Route exact path="/login" component={Login}/>
         <Route path="/quizz" component={Quizz}/>
         <Route path="/quizzOptionnal/:id" component={QuizzOptionnal}/>
         <Route path="/quizzAvatar/:id" component={QuizzAvatar}/>

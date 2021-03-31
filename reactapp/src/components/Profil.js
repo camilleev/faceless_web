@@ -92,7 +92,7 @@ function Profil(props) {
     );
     }
   } else {
-    return <Redirect to='/' />
+    return <Redirect to='/login' />
   }
 
 }

@@ -42,7 +42,7 @@ function Login(props) {
     <div>
         <div className="centerColumn" style={{minHeight: "90vh"}}>
             <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "300px"}}>
-                <p className="orangeTitle">j’ai déjà un compte : </p>
+                <p className="orangeTitle" style={{marginBottom: "20px"}}>j’ai déjà un compte : </p>
                 <input type="text" className="inputWhite" placeholder={"exemple@email.fr"} onChange={p => setEmail(p.target.value)} value={email} />
                 <p style={{marginTop: "-20px"}} className="txtError">{errorMail}</p>
                 <input type="password" className="inputWhite" placeholder={"****"} onChange={p => setPassword(p.target.value)} value={password} />
