@@ -38,8 +38,8 @@ function LandingPage() {
                             <img src="https://i.imgur.com/bh3BTFS.png" alt="blabla" style={{width: "200px", maxWidth: "80%", height: "auto", marginLeft: "5%"}}/>
                         </div>
                         <div style={{ width: "80%"}}>
-                            <h3>viens rencontrer des gens qui te comprennent</h3>
-                            <p className="txtLanding">Sur Faceless on te propose de découvrir des profils d’utilisateur qui correspondent à tes besoins. Il y a forcement quelqu’un qui a déjà traversé ce que tu vis, n’hésite pas à lui parler! </p>
+                            <h3>viens rencontrer des personnes qui te comprennent</h3>
+                            <p className="txtLanding">Sur Faceless on te propose de découvrir des profils d’utilisateurs qui correspondent à tes besoins. Il y a forcement quelqu’un qui a déjà traversé ce que tu vis, n’hésite pas à lui parler! </p>
                         </div>
                     </div>
                 </div>
@@ -117,7 +117,7 @@ function LandingPage() {
                             <img src="https://i.imgur.com/oZlI6so.png" alt="star" style={{height: "60px", maxHeight: "80%", width: "auto"}}/>
                             <div>
                                 <h3>Personnalise tes rencontres</h3>
-                                <p className="txtLanding">On te propose des personnes qui correspondent à ces filtres. De base on de te présente des gens avec les mêmes afffinités que toi mais tu peux le changer si tu veux !</p>
+                                <p className="txtLanding">On te propose des personnes qui correspondent à ces filtres. De base on te présente des personnes avec les mêmes affinités que toi mais tu peux le changer si tu veux !</p>
                             </div>
                         </div>
                     </div>
@@ -155,7 +155,7 @@ function LandingPage() {
                                 <img src="https://i.imgur.com/mzhXwBN.png" alt="heart" style={{width: "40px", maxWidth: "80%", height: "auto", position: "absolute", top: "-60px", right: "130px"}}/>
                                 <img src="https://i.imgur.com/9f33BCM.png" alt="hat" style={{width: "40px", maxWidth: "80%", height: "auto", position: "absolute", top: "-80px", right: "-60px"}}/>
                             </div>
-                            <h3 className="title right" style={{margin: "auto"}}>Il y a tes confidents et les autres, c’est toi qui choisis avec qui tu parles</h3>
+                            <h3 className="title right" style={{margin: "auto"}}>Il y a tes confidents et les autres, c’est toi qui choisis avec qui tu échanges</h3>
                             <div style={{display: "flex", flexDirection: "row", justifyContent: "space-around"}}>
                                 <img src="https://i.imgur.com/AXUpWzr.png" alt="smiley" style={{width: "35px", maxWidth: "80%", height: "auto", marginLeft: "-30px", position: "absolute", bottom: "-50px", left: "40px"}}/>
                                 <img src="https://i.imgur.com/jkoQd2T.png" alt="exclamationMark" style={{width: "40px", maxWidth: "80%", height: "auto", position: "absolute", right: "-40px"}}/>
@@ -170,7 +170,7 @@ function LandingPage() {
                 <div data-aos="fade-right">
                     <div style={{position: "relative", margin: "20%"}} >
                         <h3>Personnalise tes rencontres</h3>
-                        <p className="txtLanding"> Pas de photos, pas de numéro de téléphone, pas de localisation, la liberté totale d’être toi ! Le Toi des bons jours et le Toi des mauvais jours, on t’aime comme tu es !</p>
+                        <p className="txtLanding"> Pas de photo, pas de numéro de téléphone, pas de localisation, la liberté totale d’être toi ! Le Toi des bons jours et le Toi des mauvais jours, on t’aime comme tu es !</p>
                         <Link to={`/login`}>
                             <button className="btn" style={{marginTop: "35px"}}>
                             <p className="txtBtn">inscris-toi</p>
