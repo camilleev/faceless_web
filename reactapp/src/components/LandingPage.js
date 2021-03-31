@@ -103,7 +103,7 @@ function LandingPage() {
             <div className='bloc half'>
                 <div data-aos="fade-right">
                     <video autoPlay loop style={{width: "300px", maxWidth: "80%", height: "auto", borderRadius: "20px", boxShadow: "0px 5px 16px rgba(0, 0, 0, 0.1)" }}>
-                        <source src='https://i.imgur.com/Ckly2Pt.mp4' type="video/mp4"/>
+                        <source src='https://i.imgur.com/jZRzT87.mp4' type="video/mp4"/>
                     </video>
                 </div>
             </div>
